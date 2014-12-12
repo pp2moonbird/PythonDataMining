@@ -117,13 +117,33 @@ class Classifier:
         for i in trainingSet:
             distance = 0
             for j in range(0, columnNumber):
-                distance += abs(measures[i]-i[0][j])
-            distances.append(distance)
+                distance += abs(measures[j] - i[0][j])
+            distances.append((distance, trainingSet.index(i)))
 
+        distances = sorted(distances,key = lambda item: item[0])
+        votes = []
+        for i in range(0, k):
+            index = distances[i][1]
+            vote = trainingSet[index][1]
+            votes.append(vote)
 
-        # classify with biggest vote
+        voteCounter = {}
+        for i in votes:
+            if (i in voteCounter):
+                voteCounter[i] += 1
+            else:
+                voteCounter[i] = 1
+        result = sorted(voteCounter, key= lambda i: voteCounter[i])
+        print 'test: ' + i + str(voteCounter)
+        print 'result: ' + result
+        return result
 
-
+    def testTestSet(self):
+        testSetSize = len(self.testSet)
+        results = []
+        for i in range(0, testSetSize):
+            result = self.classifiyBasedOnKNN(i)
+            results.append(result)
 
     # standardize training set
     # compute median and asd for each field of training set
@@ -135,7 +155,8 @@ classfier.writeTrainingSetToFile('C:/Users/pengpe/Desktop/Data Mining/ch5/Python
 
 classfier.normalizeData()
 
-classfier.classifiyBasedOnKNN(0)
+# result = classfier.classifiyBasedOnKNN(0)
+
 
 
 # a = range(1, 10)
